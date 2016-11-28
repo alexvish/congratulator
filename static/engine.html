@@ -80,13 +80,14 @@
 		    var cancelTimer = function() {
 		    	if (timeoutId) {
 		    		window.clearTimeout(timeoutId);
+						timeoutId = 0;
 		    	}
-		    }
+		    };
 
 		    var setTimer = function() {
 		    	cancelTimer();
 		    	timeoutId = window.setTimeout(endPresentation, getConfig().timeout);
-		    }
+		    };
 
 		    var showing;
 		    var showPresentation = function () {
@@ -102,14 +103,16 @@
 		    	}
 		    	showing = 'target';
 		    	if (config.redirect) {
-		    		wondow.location = config.targetUrl;
+						window.location = config.targetUrl;
 		    	} else {
 		    		contentIFrame.setAttribute("src",getConfig().targetUrl);
+						setTimer();
 		    	}
 		    };
 
 
 		    var endPresentation = function() {
+					cancelTimer();
 		    	if (showing === 'presentation') {
 		    		showTarget();
 		    	} else {
