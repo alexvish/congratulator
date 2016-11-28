@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript">
+
+	    var f = function() {
+	    	if (!String.prototype.trim) {
+			  (function() {
+			    String.prototype.trim = function() {
+			      return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+			    };
+			  })();
+			}
+	    	var boolValue =  function(a) {
+	    		if (!a) {
+	    			return false;
+	    		}
+	    		if (typeof a === 'boolean') {
+	    			return a;
+	    		} else if (typeof a === 'string') {
+	    			switch(a.toLowerCase().trim()){
+        				case "true": case "yes": case "1": return true;
+        				case "false": case "no": case "0": case null: return false;
+        				default: return Boolean(string);
+    				}
+	    		} else {
+	    			return true;
+	    		}
+	    	};
+
+		    var configDefault = {
+		    	presentationUrl: '/presentation',
+		    	targetUrl: undefined,
+		    	redirect: false,
+		    	timeout: 300000
+		    };
+		    var config; 
+		    var getConfig = function() {
+		    	if (config) {
+		    		return config;
+		    	}
+		    	config = {};
+		    	var cfgAdd = function(s) {
+		    		s = s.split('=');
+		    		if (s.length < 2) {
+		    			config[s[0]] = true;
+		    		} else {
+		    			config[s[0]] = s[1];
+		    		}
+		    	};
+		    	window.location.hash.split('#').map(function(s){
+		    		return s.split('&') ;
+		    	}).reduce(function(a,b) {
+		    		return a.concat(b);
+		    	}).filter(function(s) {
+		    		return s;
+		    	}).forEach(cfgAdd);
+		    	for(var k in configDefault) {
+		    		if (!config.hasOwnProperty(k)) {
+		    			config[k] = configDefault[k];
+		    		}
+		    	}
+		    	//decode urls
+		    	config.targetUrl = config.targetUrl && window.decodeURIComponent(config.targetUrl);
+		    	config.presentationUrl = config.presentationUrl && window.decodeURIComponent(config.presentationUrl);
+		    	//decode ints
+		    	config.timeout = config.timeout && window.parseInt(config.timeout);
+		    	//decode boolean
+		    	config.redirect = boolValue(config.redirect);
+		    	return config;
+
+		    };
+
+		    var contentIFrame = window.document.getElementById('content');
+
+
+
+		    var timeoutId;
+
+		    var cancelTimer = function() {
+		    	if (timeoutId) {
+		    		window.clearTimeout(timeoutId);
+		    	}
+		    }
+
+		    var setTimer = function() {
+		    	cancelTimer();
+		    	timeoutId = window.setTimeout(endPresentation, getConfig().timeout);
+		    }
+
+		    var showing;
+		    var showPresentation = function () {
+		    	showing = 'presentation';
+		    	contentIFrame.setAttribute("src",getConfig().presentationUrl);
+		    	setTimer();
+		    };
+
+		    var showTarget = function() {
+		    	var config = getConfig();
+		    	if (! config.targetUrl) {
+		    		return showPresentation();
+		    	}
+		    	showing = 'target';
+		    	if (config.redirect) {
+		    		wondow.location = config.targetUrl;
+		    	} else {
+		    		contentIFrame.setAttribute("src",getConfig().targetUrl);
+		    	}
+		    };
+
+
+		    var endPresentation = function() {
+		    	if (showing === 'presentation') {
+		    		showTarget();
+		    	} else {
+		    		showPresentation();
+		    	}
+		    };
+		    var setTitle = function (title) {
+		    	window.document.title = title;
+		    };
+			window.addEventListener('message',function(e) {
+				var data = e.data;
+				if (data === 'presentation-ended' || data.type === 'presentation-ended') {
+					endPresentation();
+				} else if (data.type === 'title' && data.title) {
+					setTitle(data.title);
+				}
+			});
+
+			showPresentation();
+
+
+		};
+
+		window.onload = f;
+	</script>
+	<style type="text/css">
+		html,body {border:0; margin: 0; padding: 0; overflow: 'hidden'}
+		#content {
+			z-index: 0; 
+			border: 0; 
+			margin: 0; 
+			padding: 0; 
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<iframe id='content'></iframe>
+</body>
+</html>

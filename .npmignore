@@ -1,0 +1,17 @@
+node_modules
+*.iml
+.idea
+lib/*
+!lib/*.bundle.js
+!lib/*.bundle.js.map
+/secret.properties
+/service.json
+/logs
+*.bundle.js
+*.bundle.js.map
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.log
+/data

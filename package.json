@@ -1,0 +1,24 @@
+{
+  "name": "congratulator",
+  "version": "1.0.0",
+  "description": "Congratulation rotator engine",
+  "main": "index.js",
+  "scripts": {
+    "build:backend": "webpack  --config webpack.backend.config.js",
+    "build": "npm run build:backend"
+  },
+  "author": "Alexey Vishentsev",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^1.13.3"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "core-error-predicates": "^1.1.0",
+    "express": "^4.14.0",
+    "extend": "^3.0.0",
+    "moment": "^2.17.0",
+    "source-map-support": "^0.4.6",
+    "winston": "^2.3.0"
+  }
+}

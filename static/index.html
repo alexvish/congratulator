@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Roll out Engine</title>
+
+	<script type="text/javascript">
+	    if (!String.prototype.trim) {
+		  (function() {
+		    String.prototype.trim = function() {
+		      return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+		    };
+		  })();
+		}
+		var getHash = function() {
+			var hash='#';
+			var form = window.document.getElementById('engineform');
+			if (form) {
+				var targetValue = form.elements['target'].value;
+				targetValue = targetValue && targetValue.trim();
+				if (targetValue) {
+					hash += 'targetUrl=' + window.encodeURIComponent(targetValue) + '#';
+				}
+				var presentationValue = form.elements['presentation'].value;
+				presentationValue = presentationValue && presentationValue.trim();
+				if (presentationValue) {
+					hash += 'presentationUrl=' + window.encodeURIComponent(presentationValue) + '#';
+				}
+				var timeoutValue = form.elements['timeout'].value;
+				timeoutValue = timeoutValue && window.parseInt(timeoutValue);
+				if (timeoutValue && timeoutValue != 300000) {
+					hash += 'timeout=' + timeoutValue + '#';
+				}
+				var redirect = form.elements['redirect'].checked;
+				if (redirect) {
+					hash += 'redirect=true#';	
+				}
+				return hash;
+			}
+		}
+
+		var getUrl = function() {
+			return window.location.protocol + '//' + window.location.host + '/engine.html' + getHash(); 
+		};
+
+		var showUrl = function() {
+			var a = window.document.getElementById('show-url');
+			var url = getUrl();
+			a.textContent = url;
+			a.setAttribute('href', url);
+		} 
+	</script>
+</head>
+<body>
+<form id="engineform">
+    <label for="target">Target url. <br><small>If defined, target is shown with presentations</small></label><br>
+    <input id="target" name="target" type="text" placeholder="http://example.com"><p>
+    <input id="redirect" name="redirect" type="checkbox">Redirect to target after presentation <small>(if not checked, next presentation will be shown after timeout)</small><p>
+    <label for="timeout">Timeout in milliseconds</label><br><input id="timeout" type="number" step="1000" name="timeout" value="300000"><p>
+	<label for='presentation'>Url for presentation. <br><small>If you leave it empty, or define as "/presentation", a random presentation will be choosen</small></label><br>
+	<input id="presentation" name="presentation" type="text" placeholder="/presentation/g-login"/> <p>
+	<input type="button" onclick="showUrl()" value="Generate URL"><p>
+	<a id="show-url"><a>
+</form>
+</body>
+</html>

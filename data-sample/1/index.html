@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test 1</title>
+  <script type="text/javascript">
+    window.top.postMessage({type: 'title', title: document.title}, '*');
+    window.setTimeout(function() {
+      window.top.postMessage({type: 'presentation-ended'},'*');
+    },3000);
+  </script>
+</head>
+<body>
+test1
+</body>
+</html>

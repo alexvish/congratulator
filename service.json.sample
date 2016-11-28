@@ -1,0 +1,9 @@
+{
+    "data": {
+      "dir": "./data-sample",
+      "updateInterval": 600000
+    },
+    "http": {
+        "port": 1011
+    }
+}
