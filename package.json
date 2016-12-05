@@ -1,6 +1,6 @@
 {
   "name": "congratulator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Congratulation rotator engine",
   "scripts": {
     "build:backend": "webpack  --config webpack.backend.config.js",
