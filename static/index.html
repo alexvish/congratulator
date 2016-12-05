@@ -18,23 +18,23 @@
 				var targetValue = form.elements['target'].value;
 				targetValue = targetValue && targetValue.trim();
 				if (targetValue) {
-					hash += 'targetUrl=' + window.encodeURIComponent(targetValue) + '#';
+					hash += 'targetUrl=' + window.encodeURIComponent(targetValue) + '&';
 				}
 				var presentationValue = form.elements['presentation'].value;
 				presentationValue = presentationValue && presentationValue.trim();
 				if (presentationValue) {
-					hash += 'presentationUrl=' + window.encodeURIComponent(presentationValue) + '#';
+					hash += 'presentationUrl=' + window.encodeURIComponent(presentationValue) + '&';
 				}
 				var timeoutValue = form.elements['timeout'].value;
 				timeoutValue = timeoutValue && window.parseInt(timeoutValue);
 				if (timeoutValue && timeoutValue != 300000) {
-					hash += 'timeout=' + timeoutValue + '#';
+					hash += 'timeout=' + timeoutValue + '&';
 				}
 				var redirect = form.elements['redirect'].checked;
 				if (redirect) {
-					hash += 'redirect=true#';	
+					hash += 'redirect=true&';	
 				}
-				return hash;
+				return hash.substring(0,hash.length - 1);
 			}
 		}
 
